@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include<mysql.h> //These Libraries were added by including folders to projects options
 #include<mysqld_error.h> //and this particularly, when pasting 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
@@ -6,7 +7,27 @@ using namespace std;
 char HOST[]="localhost";
 char USER[]="root";
 char PASS[]="root";
+void progressBar(int width, int time) {
+    for (int i = 0; i < width; ++i) {
+        cout << "[";
 
+        for (int j = 0; j <= i; ++j) {
+            cout << "=";
+        }
+
+        for (int j = i + 1; j < width; ++j) {
+            cout << " ";
+        }
+
+        cout << "] " << int((float)(i + 1) / width * 100) << "%\r";
+        cout.flush();
+
+        // Simulate some work
+        usleep(time * 1000); // usleep takes time in microseconds
+    }
+
+    cout << endl;
+}
 int main() {
 	MYSQL* obj; //one to manage MYSQL session.
 	int College_ID;
@@ -63,6 +84,8 @@ int main() {
 					cout<<"ERROR: Impossible to connect:"<<endl;
 					cout<<mysql_error(obj)<<endl;
 				}
+				 cout << "Progress:" << endl;
+    progressBar(50, 100);
 				if(mysql_query(obj,consult))
 				{
 					cout<<"Error:"<<mysql_error(obj)<<endl;
@@ -91,7 +114,6 @@ int main() {
 	cout<<"BYE!!!!"<<endl;
 	return 0;
 }
-
 
 
 
